@@ -96,6 +96,8 @@ in
 
     fastfetch
     tty-clock
+
+    nautilus
     
 
 
