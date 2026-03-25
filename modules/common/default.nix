@@ -8,14 +8,29 @@ in
 {
   imports = [ 
     inputs.spicetify-nix.nixosModules.default 
-    # Ensure Home Manager is imported here if it's not in your main configuration.nix
   ];
 
-  # 1. THE CURSOR FIX (Home Manager Section)
-  # This fixes the cursor for GTK, X11 (Steam), and Wayland apps
-  home-manager.users.levi = {
-    home.stateVersion = "25.05"; # Adjust to your current NixOS version
-    
+  # User Configuration (Home Manager)
+  home-manager.users.levi = { config, ... }: {
+    home.stateVersion = "25.05";
+
+    # Import other home-specific modules
+    imports = [
+      ../../home.nix
+      ../shared/hyprland.nix
+    ];
+
+    # Git Configuration
+    programs.git = {
+      enable = true;
+      userName = "Levi";
+      userEmail = "levisuper@gmx.de";
+      extraConfig = {
+        include.path = "${config.home.homeDirectory}/nixos-dotfiles/config/git/config";
+      };
+    };
+
+    # Cursor & Theme Fixes
     home.pointerCursor = {
       gtk.enable = true;
       x11.enable = true;
@@ -33,20 +48,17 @@ in
     };
   };
 
-  # 2. STABILITY FIX (Session Variables)
-  # This prevents Steam/Wofi from crashing Hyprland on NVIDIA
+  # System-wide Session Variables (NVIDIA stability)
   environment.sessionVariables = {
     XCURSOR_THEME = "Bibata-Modern-Classic";
     XCURSOR_SIZE = "24";
     HYPRCURSOR_THEME = "Bibata-Modern-Classic";
     HYPRCURSOR_SIZE = "24";
-    # Ensure Wayland is forced for Electron apps
     NIXOS_OZONE_WL = "1";
-    # Crucial for NVIDIA cursors not disappearing
     WLR_NO_HARDWARE_CURSORS = "1";
   };
 
-  # 3. Setup Spicetify
+  # Spicetify (System level)
   programs.spicetify = {
     enable = true;
     theme = spicePkgs.themes.catppuccin;
@@ -59,21 +71,15 @@ in
     ];
   };
 
+  # System Packages
   environment.systemPackages = with pkgs; [
     inputs.zen-browser.packages."${pkgs.system}".default
     vscodium
     psmisc
-    bibata-cursors # Added to system packages
+    bibata-cursors
     fish
     gitkraken
-
-
-
-
-
-
-
-
+    
     (enpass.overrideAttrs (oldAttrs: rec {
       version = "6.11.13.1957"; 
       src = fetchurl {
