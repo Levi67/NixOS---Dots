@@ -56,6 +56,17 @@ in
     HYPRCURSOR_SIZE = "24";
     NIXOS_OZONE_WL = "1";
     WLR_NO_HARDWARE_CURSORS = "1";
+
+    # Forces NVIDIA to use the modern GBM backend
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+  
+    # Fixes flickering/lag in Electron apps (Discord, VS Code)
+    NVD_BACKEND = "direct"; 
+  
+    # Required for many apps to not hang on launch
+    XDG_SESSION_TYPE = "wayland";
+
   };
 
   # Spicetify (System level)
@@ -71,6 +82,9 @@ in
     ];
   };
 
+
+
+
   # System Packages
   environment.systemPackages = with pkgs; [
     inputs.zen-browser.packages."${pkgs.system}".default
@@ -79,7 +93,15 @@ in
     bibata-cursors
 
     gitkraken
+
+    fastfetch
+    tty-clock
     
+
+
+
+
+
     (enpass.overrideAttrs (oldAttrs: rec {
       version = "6.11.13.1957"; 
       src = fetchurl {
