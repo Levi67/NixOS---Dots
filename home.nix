@@ -39,6 +39,21 @@ in
 
 
 
+  # Add these to your home.nix
+  xdg.configFile."kitty".source = create_symlink "${dotfiles}/kitty";
+  xdg.configFile."fish".source = create_symlink "${dotfiles}/fish";
+  xdg.configFile."waypaper".source = create_symlink "${dotfiles}/waypaper";
+
+  # Symlink just the settings and keybinds | Keybindings
+  home.file.".config/VSCodium/User/settings.json".source = create_symlink "${dotfiles}/vscodium/settings.json";
+  home.file.".config/VSCodium/User/keybindings.json".source = create_symlink "${dotfiles}/vscodium/keybindings.json";
+
+
+
+
+
+
+
   myHyprland.enable = true;
 
 
