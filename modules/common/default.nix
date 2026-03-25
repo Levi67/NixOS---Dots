@@ -77,7 +77,7 @@ in
     vscodium
     psmisc
     bibata-cursors
-    fish
+
     gitkraken
     
     (enpass.overrideAttrs (oldAttrs: rec {

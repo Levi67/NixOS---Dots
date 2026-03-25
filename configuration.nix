@@ -91,11 +91,14 @@
     packages = with pkgs; [
       tree
     ];
+    shell = pkgs.fish;
   };
 
   nixpkgs.config.allowUnfree = true;
 
   programs.firefox.enable = true;
+
+  programs.fish.enable = true;
 
   environment.systemPackages = with pkgs; [
     vim
