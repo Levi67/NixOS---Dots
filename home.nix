@@ -49,6 +49,9 @@ in
   home.file.".config/VSCodium/User/keybindings.json".source = create_symlink "${dotfiles}/vscodium/keybindings.json";
 
 
+  imports = [
+    ./modules/shared/hyprland.nix
+  ];
 
 
 

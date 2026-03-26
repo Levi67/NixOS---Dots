@@ -10,8 +10,10 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  
+
   # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   networking.hostName = "nixie";
 
@@ -49,6 +51,8 @@
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+
+
   };
 
   hardware.nvidia = {

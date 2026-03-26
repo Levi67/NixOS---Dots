@@ -20,7 +20,7 @@
     enable32Bit = true; 
     extraPackages = with pkgs; [
       nvidia-vaapi-driver
-      vaapiVdpau
+      libva-vdpau-driver
       libvdpau-va-gl
     ];
   };
@@ -44,7 +44,7 @@
       settings = {
 
         toggle_hud = "F8";
-        # Performance Metrics
+        # Performance Metricsl
         fps = true;
         frametime = true;
         frame_timing = true;

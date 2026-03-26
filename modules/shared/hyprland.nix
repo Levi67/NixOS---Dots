@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 let
   cfg = config.myHyprland; # This is our custom 'namespace'
@@ -20,6 +20,9 @@ in {
   config = lib.mkIf cfg.enable {
     # Install the "Bonus Apps"
     home.packages = with pkgs; [
+
+      inputs.quickshell.packages.${pkgs.system}.default
+
       waypaper
       waybar
       wofi
