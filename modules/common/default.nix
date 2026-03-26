@@ -98,6 +98,8 @@ in
     tty-clock
 
     nautilus
+
+    htop
     
 
 
