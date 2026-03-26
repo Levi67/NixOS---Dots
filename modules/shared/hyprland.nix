@@ -37,5 +37,13 @@ in {
       source = create_symlink "${dotfiles}/hypr/";
       recursive = true;
     };
+
+    # Symlink the Quickshell configuration folder
+    xdg.configFile."quickshell" = {
+      source = create_symlink "${dotfiles}/quickshell/";
+      recursive = true;
+    };
+
+
   };
 }
