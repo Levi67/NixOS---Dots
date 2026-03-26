@@ -29,6 +29,8 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
+  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+
   networking.hostName = "nixie";
 
   networking.networkmanager.enable = true;
@@ -69,31 +71,50 @@
 
   };
 
+
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
-    # Recommended for 40-series cards
-    open = true;
-    nvidiaSettings = true;
+    open = true; # Keep this true for 40-series
     package = config.boot.kernelPackages.nvidiaPackages.latest;
+
+    # Force NVIDIA to be the main GPU (fixes the AMD iGPU takeover)
+    prime = {
+      sync.enable = true;
+      # Use lspci to verify these IDs! (e.g., 01:00.0 becomes "PCI:1:0:0")
+      # 01:00.0 becomes PCI:1:0:0
+      nvidiaBusId = "PCI:1:0:0";
+      # 0b:00.0 becomes PCI:11:0:0 (0b in hex is 11 in decimal)
+      amdgpuBusId = "PCI:11:0:0";
+    };
   };
 
-  environment.sessionVariables = {
+
+  # Force the environment to prefer NVIDIA for all Vulkan apps
+  environment.variables = {
+    VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
+  };
+
+environment.sessionVariables = {
     # Forces Electron/Chromium apps (like Steam's UI) to use Wayland
     NIXOS_OZONE_WL = "1";
   
     # Required for NVIDIA Wayland
     LIBVA_DRIVER_NAME = "nvidia";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia"; # Ensure this only appears ONCE
   
-    # Tell XDG which session we are in (helps Wofi/Launchers)
+    # Tell XDG which session we are in
     XDG_SESSION_TYPE = "wayland";
     XDG_CURRENT_DESKTOP = "Hyprland";
     XDG_SESSION_DESKTOP = "Hyprland";
 
-    # Fixes invisible cursors on some NVIDIA setups
+    # Fixes invisible cursors
     WLR_NO_HARDWARE_CURSORS = "1"; 
+
+    # On 25.11, the path usually looks like this
+    VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
+    
+    # Force Gamescope to use X11 backend to avoid the Wayland input crash
+    SDL_VIDEODRIVER = "x11";
   };
   # -----------------------
 

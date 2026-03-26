@@ -11,6 +11,8 @@
     # Automatically adds proton-ge to Steam's compatibility tools
     extraCompatPackages = with pkgs; [
       proton-ge-bin
+      libkrb5
+      keyutils
     ];
   };
 
@@ -25,6 +27,29 @@
     ];
   };
 
+  # Crucial for Proton's native Wayland support
+  environment.systemPackages = with pkgs; [
+    wayland
+    libxkbcommon
+  ];
+
+
+  programs.gamescope = {
+    enable = true;
+    capSysNice = true;
+    # These arguments are prepended to every gamescope call
+    args = [
+      "--backend sdl"              # SDL is much more stable for NVIDIA nested sessions
+#      "--preferred-vk-device 10de:2702" # Replace with your 40-series ID (see below)
+    ];
+  };
+
+  # This forces the entire system to look at NVIDIA's Vulkan driver first
+  environment.sessionVariables = {
+    VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+  };
+
   # 3. User-level Settings (Home Manager)
   home-manager.users.levi = {
     home.packages = with pkgs; [
@@ -34,7 +59,7 @@
       mangohud     
       protonup-qt  
       vulkan-tools 
-      gamescope    
+#      gamescope    
     ];
 
     # --- ADDED: MangoHud Configuration ---
