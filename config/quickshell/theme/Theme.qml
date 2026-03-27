@@ -37,7 +37,7 @@ QtObject {
     readonly property int barHeight: 26 
 
     // The transparent space above and below the bubble
-    readonly property int verticalMargin: 8 
+    readonly property int verticalMargin: 8
 
     // The space from the screen edges (Left/Right)
     readonly property int sideMargin: 10 
