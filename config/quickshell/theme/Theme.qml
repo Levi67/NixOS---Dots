@@ -5,11 +5,17 @@ pragma Singleton
 
 QtObject {
     // Colors from Wallust
-    readonly property color background: "#000009"
-    readonly property color barBackground: "#00000999" // 60% Alpha
-    readonly property color accent: "#7A96A7"
-    readonly property color text: "#D7E1E7"
-    readonly property color inactiveWorkspace: "#848E94"
+    // Takes the generated background and makes it 15% darker
+    readonly property color background: "#000000"
+    
+    // You can also mix in transparency after darkening
+    // This results in #66000000
+    readonly property color barBackground: "#88000000"
+
+
+    readonly property color accent: "#A8937E"
+    readonly property color text: "#F4F1F1"
+    readonly property color inactiveWorkspace: "#1E3722"
     
 
 
@@ -31,7 +37,7 @@ QtObject {
     readonly property int gapSize: 5
     readonly property int barPadding: 8
 
-    readonly property color activeWorkspace: '#cdd6f4'
+    readonly property color activeWorkspace: "#FFFFFF"
     // readonly property color inactiveWorkspace: '#9393c3'
 
 

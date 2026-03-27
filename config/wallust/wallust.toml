@@ -1,14 +1,17 @@
 # ~/.config/wallust/wallust.toml
 
 # Global Settings
-backend = "fast-resize" # or "kmeans", "full"
-color_space = "lab"
+backend = "full" # or "kmeans", "full"
+color_space = "labmixed"
 threshold = 20
 
 [templates]
 # Quickshell Theme
-# Format: name = { template = "src", target = "dst" }
+# ~/.config/wallust/wallust.toml
+
 quickshell = { template = "Theme.qml.template", target = "~/.config/quickshell/theme/Theme.qml" }
+
+
 
 # Hyprland Colors
 #hyprland = { template = "hyprland.conf.template", target = "~/.config/hypr/colors.conf" }
@@ -19,3 +22,5 @@ quickshell = { template = "Theme.qml.template", target = "~/.config/quickshell/t
 
 # Zathura (inline style)
 #zathura = { template = "zathurarc.template", target = "~/.config/zathura/zathurarc" }
+
+kitty = { template = "kitty.template", target = "~/.config/kitty/colors.conf" }
