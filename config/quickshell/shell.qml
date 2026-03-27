@@ -1,38 +1,19 @@
+// shell.qml
 import Quickshell
-import Quickshell.Io // for Process
-import QtQuick
 
-PanelWindow {
-  anchors {
-    top: true
-    left: true
-    right: true
-  }
+import "components" as UI
 
-  implicitHeight: 30
-
-  Text {
-    // give the text an ID we can refer to elsewhere in the file
-    id: clock
-
-    anchors.centerIn: parent
-
-    // create a process management object
-    Process {
-      // the command it will run, every argument is its own string
-      command: ["date"]
-
-      // run the command immediately
-      running: true
-
-      // process the stdout stream using a StdioCollector
-      // Use StdioCollector to retrieve the text the process sends
-      // to stdout.
-      stdout: StdioCollector {
-        // Listen for the streamFinished signal, which is sent
-        // when the process closes stdout or exits.
-        onStreamFinished: clock.text = this.text // `this` can be omitted
-      }
+ShellRoot {
+    // 1. DATA LAYER (Optional but recommended)
+    // Put your logic, timers, and Hyprland IPC listeners here.
+    Scope {
+        id: globalState
+        property string activeWorkspace: "1"
     }
-  }
+
+    // 2. VISUAL LAYER
+    // This tells Quickshell to actually build the Bar window.
+    UI.Bar {
+        // You can pass data from your Scope down into the Bar here
+    }
 }
