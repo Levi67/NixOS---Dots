@@ -5,11 +5,11 @@ pragma Singleton
 
 QtObject {
     // Colors from Wallust
-    readonly property color background: "#000009"
-    readonly property color barBackground: "#00000999" // 60% Alpha
-    readonly property color accent: "#7A96A7"
-    readonly property color text: "#D7E1E7"
-    readonly property color inactiveWorkspace: "#848E94"
+    readonly property color background: "{{background}}"
+    readonly property color barBackground: "{{background}}99" // 60% Alpha
+    readonly property color accent: "{{color4}}"
+    readonly property color text: "{{foreground}}"
+    readonly property color inactiveWorkspace: "{{color8}}"
     
 
 

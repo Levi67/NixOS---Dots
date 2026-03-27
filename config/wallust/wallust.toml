@@ -1,0 +1,21 @@
+# ~/.config/wallust/wallust.toml
+
+# Global Settings
+backend = "fast-resize" # or "kmeans", "full"
+color_space = "lab"
+threshold = 20
+
+[templates]
+# Quickshell Theme
+# Format: name = { template = "src", target = "dst" }
+quickshell = { template = "Theme.qml.template", target = "~/.config/quickshell/theme/Theme.qml" }
+
+# Hyprland Colors
+#hyprland = { template = "hyprland.conf.template", target = "~/.config/hypr/colors.conf" }
+
+# Dunst (using the dot syntax you showed)
+#dunst.template = "dunstrc.template"
+#dunst.target = "~/.config/dunst/dunstrc"
+
+# Zathura (inline style)
+#zathura = { template = "zathurarc.template", target = "~/.config/zathura/zathurarc" }
