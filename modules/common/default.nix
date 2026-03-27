@@ -103,6 +103,10 @@ in
     
     notion-app-enhanced
 
+    wallust
+
+    inotify-tools
+
     # Display settings
     nwg-displays
     wlr-randr  # Required backend for nwg-displays to talk to Wayland

@@ -37,6 +37,16 @@ in
 #    recursive = true;
   };
 
+  xdg.configFile."wallust" = {
+    source = create_symlink "${dotfiles}/wallust/";
+#    recursive = true;
+  };
+
+  xdg.configFile."scripts" = {
+    source = create_symlink "${dotfiles}/scripts/";
+#    recursive = true;
+  };
+
 
 
   # Add these to your home.nix
