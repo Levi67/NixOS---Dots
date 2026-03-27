@@ -16,6 +16,10 @@ Scope {
         PanelWindow {
             required property var modelData
             screen: modelData
+
+
+
+            WlrLayershell.namespace: "quickshell"
             
             // Uncomment this to make windows respect your new bar size!
             // Wl.exclusiveZone: height 

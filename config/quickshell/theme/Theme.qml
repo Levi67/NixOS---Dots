@@ -8,7 +8,7 @@ QtObject {
     // Colors (Catppuccin Mocha example)
     readonly property color base: '#9393c3'
     readonly property color text: "#cdd6f4"
-    readonly property color accent: '#273243'
+    readonly property color accent: '#162337'
     readonly property color red: "#f38ba8"
 
     readonly property color barBackground: Qt.rgba(accent.r, accent.g, accent.b, 0.7)
