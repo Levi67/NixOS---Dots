@@ -101,6 +101,7 @@ in
 
     htop
     
+    notion-app-enhanced
 
 
 
