@@ -11,12 +11,12 @@ Text {
     font.pixelSize: textSize
     
     // This updates the text automatically without needing an external 'date' process
-    text: Qt.formatDateTime(new Date(), "hh:mm     ")
+    text: Qt.formatDateTime(new Date(), "hh:mm")
 
     Timer {
         interval: 1000
         running: true
         repeat: true
-        onTriggered: clock.text = Qt.formatDateTime(new Date(), "hh:mm       ")
+        onTriggered: clock.text = Qt.formatDateTime(new Date(), "hh:mm")
     }
 }
