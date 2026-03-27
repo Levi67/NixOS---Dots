@@ -103,6 +103,9 @@ in
     
     notion-app-enhanced
 
+    # Display settings
+    nwg-displays
+    wlr-randr  # Required backend for nwg-displays to talk to Wayland
 
 
 
