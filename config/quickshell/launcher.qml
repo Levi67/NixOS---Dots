@@ -21,7 +21,8 @@ ShellRoot {
             anchors.fill: parent
             color: Theme.barBackground 
             radius: 20
-            border.color: Theme.accent
+            // Window border: 40% darker than accent
+            border.color: Qt.darker(Theme.accent, 1.6) 
             border.width: 1
             clip: true
 
@@ -42,7 +43,7 @@ ShellRoot {
                     bottomPadding: Theme.padding
 
                     placeholderText: "Search apps..."
-                    placeholderTextColor: Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.5)
+                    placeholderTextColor: Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.4)
                     color: Theme.text
                     font.pixelSize: Theme.textSize
                     verticalAlignment: TextInput.AlignVCenter 
@@ -51,19 +52,16 @@ ShellRoot {
                         implicitHeight: Theme.bubbleHeight + 16 
                         color: Theme.barBackground
                         radius: 12
-                        border.color: parent.activeFocus ? Theme.accent : Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.1)
+                        // Input border: 50% darker when focused
+                        border.color: parent.activeFocus ? Qt.darker(Theme.accent, 1.5) : Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.1)
                         border.width: 1
                     }
 
-                    // --- THE INSTANT-LAUNCH LOGIC ---
                     Keys.onPressed: (event) => {
                         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                            // 1. Get the filtered list of apps
                             let results = DesktopEntries.applications.values.filter(app => 
                                 app.name.toLowerCase().includes(searchInput.text.toLowerCase())
                             );
-                            
-                            // 2. Launch the absolute first one in the list
                             if (results.length > 0) {
                                 results[0].execute();
                                 Qt.quit();
@@ -83,7 +81,6 @@ ShellRoot {
                     clip: true
                     spacing: Theme.gapSize
                     
-                    // Mouse-only focus logic
                     model: DesktopEntries.applications.values.filter(app => 
                         app.name.toLowerCase().includes(searchInput.text.toLowerCase())
                     )
@@ -93,12 +90,12 @@ ShellRoot {
                         width: list.width
                         height: Theme.bubbleHeight + Theme.padding 
                         
-                        // Traditional mouse-hover marking
                         background: Rectangle {
                             color: hovered ? Theme.inactiveWorkspace : "transparent"
                             radius: 8
+                            // Hover border: 60% darker for high contrast
                             border.width: hovered ? 1 : 0
-                            border.color: Theme.accent
+                            border.color: Qt.darker(Theme.accent, 1.6)
                         }
                         
                         contentItem: RowLayout {
@@ -130,7 +127,6 @@ ShellRoot {
                         }
                     }
 
-                    // --- MOUSE WHEEL SPEED FIX ---
                     MouseArea {
                         anchors.fill: parent
                         propagateComposedEvents: true
