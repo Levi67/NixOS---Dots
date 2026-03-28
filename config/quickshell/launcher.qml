@@ -11,22 +11,19 @@ ShellRoot {
         id: launcher
         width: 600
         height: 700
-        
-        // 1. Invisible container to allow rounded corners
         color: "transparent" 
 
         WlrLayershell.namespace: "launcher"
         WlrLayershell.layer: WlrLayer.Overlay 
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
 
-        // 2. THE VISUAL SHELL (This is where the radius lives)
         Rectangle {
             anchors.fill: parent
             color: Theme.barBackground 
-            radius: 20 // <--- WINDOW ROUNDNESS
+            radius: 20
             border.color: Theme.accent
             border.width: 1
-            clip: true // Prevents children from drawing outside the rounded corners
+            clip: true
 
             ColumnLayout {
                 anchors.fill: parent
@@ -46,7 +43,6 @@ ShellRoot {
 
                     placeholderText: "Search apps..."
                     placeholderTextColor: Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.5)
-
                     color: Theme.text
                     font.pixelSize: Theme.textSize
                     verticalAlignment: TextInput.AlignVCenter 
@@ -54,13 +50,29 @@ ShellRoot {
                     background: Rectangle {
                         implicitHeight: Theme.bubbleHeight + 16 
                         color: Theme.barBackground
-                        radius: 12 // Slightly rounder for the input box
+                        radius: 12
                         border.color: parent.activeFocus ? Theme.accent : Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.1)
                         border.width: 1
                     }
 
-                    onTextChanged: list.currentIndex = 0 
-                    Keys.onEscapePressed: Qt.quit()
+                    // --- THE INSTANT-LAUNCH LOGIC ---
+                    Keys.onPressed: (event) => {
+                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                            // 1. Get the filtered list of apps
+                            let results = DesktopEntries.applications.values.filter(app => 
+                                app.name.toLowerCase().includes(searchInput.text.toLowerCase())
+                            );
+                            
+                            // 2. Launch the absolute first one in the list
+                            if (results.length > 0) {
+                                results[0].execute();
+                                Qt.quit();
+                            }
+                            event.accepted = true;
+                        } else if (event.key === Qt.Key_Escape) {
+                            Qt.quit();
+                        }
+                    }
                 }
 
                 // --- THE APP LIST ---
@@ -71,12 +83,7 @@ ShellRoot {
                     clip: true
                     spacing: Theme.gapSize
                     
-                    boundsBehavior: Flickable.StopAtBounds 
-                    flickDeceleration: 3000 
-                    interactive: true
-                    highlightFollowsCurrentItem: true
-                    keyNavigationEnabled: true
-
+                    // Mouse-only focus logic
                     model: DesktopEntries.applications.values.filter(app => 
                         app.name.toLowerCase().includes(searchInput.text.toLowerCase())
                     )
@@ -86,9 +93,12 @@ ShellRoot {
                         width: list.width
                         height: Theme.bubbleHeight + Theme.padding 
                         
+                        // Traditional mouse-hover marking
                         background: Rectangle {
-                            color: parent.hovered ? Theme.inactiveWorkspace : "transparent"
+                            color: hovered ? Theme.inactiveWorkspace : "transparent"
                             radius: 8
+                            border.width: hovered ? 1 : 0
+                            border.color: Theme.accent
                         }
                         
                         contentItem: RowLayout {
@@ -115,8 +125,8 @@ ShellRoot {
                         }
 
                         onClicked: {
-                            modelData.execute(); 
-                            Qt.quit();           
+                            modelData.execute();
+                            Qt.quit();
                         }
                     }
 
@@ -125,11 +135,8 @@ ShellRoot {
                         anchors.fill: parent
                         propagateComposedEvents: true
                         acceptedButtons: Qt.NoButton 
-                        
                         onWheel: (wheel) => {
-                            // Calculates movement based on item height
-                            let scrollStep = (Theme.bubbleHeight + Theme.padding + list.spacing) * 2;
-                            
+                            let scrollStep = (Theme.bubbleHeight + Theme.padding + list.spacing) * 3;
                             if (wheel.angleDelta.y > 0) {
                                 list.contentY = Math.max(list.originY, list.contentY - scrollStep);
                             } else {
