@@ -13,9 +13,9 @@ QtObject {
     readonly property color barBackground: "#88000000"
 
 
-    readonly property color accent: "#3E4749"
-    readonly property color text: "#EBEFED"
-    readonly property color inactiveWorkspace: "#3E4448"
+    readonly property color accent: "#BA8E72"
+    readonly property color text: "#F9E6E5"
+    readonly property color inactiveWorkspace: "#4B282D"
     
 
 
