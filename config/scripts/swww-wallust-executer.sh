@@ -28,15 +28,14 @@ while true; do
             # Restore the cached color sequences
             cp "$HISTORY_DIR/$WALL_ID" "$CACHE_DIR/sequences"
             
-            # Use -s (skip) to skip image analysis but RE-GENERATE Theme.qml and kitty configs
-            # This is the secret to making the cache hit actually update your UI
+            # Re-generate templates (Theme.qml, kitty colors) using the cache
             wallust run -s "$CURRENT_WALL"
             SUCCESS=true
         else
-            echo "LOG: Cache Miss. Running full analysis (this may take a second)..."
+            echo "LOG: Cache Miss. Running full analysis..."
             
             if timeout 20s wallust run "$CURRENT_WALL"; then
-                # Backup the newly generated sequences for next time
+                # Backup for next time
                 cp "$CACHE_DIR/sequences" "$HISTORY_DIR/$WALL_ID"
                 SUCCESS=true
             else
@@ -47,26 +46,24 @@ while true; do
 
         # 4. Apply changes to running applications
         if [ "$SUCCESS" = true ]; then
-            echo "LOG: Applying colors to terminals and shell..."
+            echo "LOG: Applying colors to terminals..."
 
-            # Apply colors to all running Kitty instances
-            # We use the templated file wallust just created
             if [ -f "$KITTY_CONF" ]; then
-                kitty @ set-colors --all --configured "$KITTY_CONF"
+                # Apply the full generated config first
+                kitten @ set-colors --all --configured "$KITTY_CONF"
+                
+                # FORCE the specific input color (color9) and foreground (text)
+                # This ensures your typing is always bright regardless of the wallpaper
+                kitten @ set-colors --all "color9=#e0e0e0" "foreground=#ffffff"
+                
+                # Fix the opacity (sometimes set-colors resets it)
+                kitten @ set-background-opacity --all 0.60
             fi
-
-            # Force your specific "Greyish/Black" glass overrides
-            kitty @ set-colors --all "background=#2f2f2f"
-            kitty @ set-background-opacity --all 0.60
-            
-            # If your Quickshell isn't using a FileWatcher yet, 
-            # uncomment the line below to force the bar to update:
-            # quickshell --reload 
         fi
         
         LAST_WALL="$CURRENT_WALL"
     fi
     
-    # Wait 1 second before checking again to save battery/CPU
+    # Wait 1 second before checking again
     sleep 1
 done
