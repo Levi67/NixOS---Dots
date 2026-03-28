@@ -3,7 +3,10 @@
 
 foreground            {{foreground}}
 # Blends wallpaper background with grey to ensure a minimum brightness floor
-background            {{background | blend("#282525")}}
+# background            #2f2f2f
+# background            {{background | blend("#282525")}}
+background            {{background}}
+# background_opacity    0.60
 cursor                {{cursor}}
 selection_background  {{color1}}
 selection_foreground  {{foreground}}
