@@ -29,6 +29,7 @@ while true; do
             cp "$HISTORY_DIR/$WALL_ID" "$CACHE_DIR/sequences"
             
             # Use -s (skip) to skip image analysis but RE-GENERATE Theme.qml and kitty configs
+            # This is the secret to making the cache hit actually update your UI
             wallust run -s "$CURRENT_WALL"
             SUCCESS=true
         else
@@ -49,6 +50,7 @@ while true; do
             echo "LOG: Applying colors to terminals and shell..."
 
             # Apply colors to all running Kitty instances
+            # We use the templated file wallust just created
             if [ -f "$KITTY_CONF" ]; then
                 kitty @ set-colors --all --configured "$KITTY_CONF"
             fi
