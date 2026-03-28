@@ -1,60 +1,39 @@
-# --- Wallust Dynamic Colors ---
-# Generated from: {{wallpaper}}
+# Wallust Kitty Template
 
-foreground            {{foreground}}
-# Blends wallpaper background with grey to ensure a minimum brightness floor
-# background            #2f2f2f
-# background            {{background | blend("#282525")}}
-background            {{background}}
-# background_opacity    0.60
-cursor                {{cursor}}
-selection_background  {{color1}}
-selection_foreground  {{foreground}}
+# --- THE FIXED BACKGROUND ---
+# This ensures your background is ALWAYS #2f2f2f regardless of the wallpaper
+background #2f2f2f
+background_opacity 0.60
 
-url_color             {{color4}}
+# --- THE TEXT (Foreground) ---
+# Use color7 (usually a bright grey/white) so it's always readable
+foreground #ffffff
 
-# --- Window Borders ---
-active_border_color   {{color4}}
-inactive_border_color {{color0}}
-bell_border_color     {{color1}}
-
-# --- Tab Bar ---
-active_tab_foreground   {{background}}
-active_tab_background   {{color4}}
-inactive_tab_foreground {{foreground}}
-inactive_tab_background {{color0}}
-tab_bar_background      {{background}}
-
-# --- The 16 Terminal Colors ---
-
-# black
+# --- THE ACCENTS (The 16 colors) ---
+# These will still change based on your wallpaper for syntax highlighting
 color0  {{color0}}
+color1  {{color1}}
+color2  {{color2}}
+color3  {{color3}}
+color4  {{color4}}
+color5  {{color5}}
+color6  {{color6}}
+color7  {{color6}}
 color8  {{color8}}
 
-# red
-color1  {{color1}}
-color9  {{color9}}
+# Input text Color
+color9  #e0e0e0
 
-# green
-color2  {{color2}}
 color10 {{color10}}
-
-# yellow
-color3  {{color3}}
 color11 {{color11}}
-
-# blue
-color4  {{color4}}
 color12 {{color12}}
-
-# magenta
-color5  {{color5}}
 color13 {{color13}}
-
-# cyan
-color6  {{color6}}
 color14 {{color14}}
-
-# white
-color7  {{color7}}
 color15 {{color15}}
+
+# Selection colors
+selection_foreground {{background}}
+selection_background {{color7}}
+
+# Cursor
+cursor {{color7}}
