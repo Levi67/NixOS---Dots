@@ -49,6 +49,7 @@ in
 
 
 
+
   # Add these to your home.nix
   xdg.configFile."kitty".source = create_symlink "${dotfiles}/kitty";
   xdg.configFile."fish".source = create_symlink "${dotfiles}/fish";
@@ -61,6 +62,7 @@ in
 
   imports = [
     ./modules/shared/hyprland.nix
+    ./modules/services/wallust-poller.nix
   ];
 
 
