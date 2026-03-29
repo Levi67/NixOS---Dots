@@ -101,11 +101,16 @@ in
 
     htop
     
-    notion-app-enhanced
+    # notion-app-enhanced
 
     wallust
 
+    remmina
+
     inotify-tools
+
+    unzip
+    unrar
 
     # Display settings
     nwg-displays

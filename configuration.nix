@@ -4,6 +4,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./modules/shared/flatpak.nix
     ];
 
 
@@ -24,12 +25,16 @@
   boot.kernel.sysctl = {
     "net.core.default_qdisc" = "fq";
     "net.ipv4.tcp_congestion_control" = "bbr";
+    "vm.max_map_count" = 2147483642; # The "Steam Deck" value
   };
 
   networking.enableIPv6 = false;
 
 
   
+
+
+
 
 
 
@@ -41,6 +46,12 @@
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_zen;
+
+  boot.kernelParams = [ 
+    "vsyscall=emulate"      # Fixes the PioneerGame.exe vsyscall read denied (CRITICAL)
+    "clearcpuid=514"        # Disables UMIP (fixes the errors from your previous log)
+    "split_lock_detect=off" # Stops GameMode from failing and fixes related stutters
+  ];
 
   networking.hostName = "nixie";
 
@@ -107,8 +118,20 @@
 
     # Fixes invisible cursors on some NVIDIA setups
     WLR_NO_HARDWARE_CURSORS = "1"; 
+
+  __GL_SHADER_DISK_CACHE_SKIP_CLEANUP = "1";
+  __GL_SHADER_DISK_CACHE_SIZE = "4294967296"; # 4GB in bytes
+
   };
   # -----------------------
+
+
+  security.pam.loginLimits = [{
+    domain = "*";
+    type = "soft";
+    item = "nofile";
+    value = "524288";
+  }];
 
   xdg.portal = {
     enable = true;

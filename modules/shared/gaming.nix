@@ -34,7 +34,8 @@
       mangohud     
       protonup-qt  
       vulkan-tools 
-      gamescope    
+      gamescope
+      prismlauncher    
     ];
 
     # --- ADDED: MangoHud Configuration ---
@@ -44,6 +45,9 @@
       settings = {
 
         toggle_hud = "F8";
+
+        fps_limit = 144;
+
         # Performance Metricsl
         fps = true;
         frametime = true;
