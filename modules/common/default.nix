@@ -82,6 +82,8 @@ in
     ];
   };
 
+  services.gnome.gnome-keyring.enable = true;
+
 
 
 
@@ -96,10 +98,16 @@ in
 
     fastfetch
     tty-clock
+    pavucontrol
 
     nautilus
 
     htop
+
+    zellij
+
+
+    polkit_gnome
     
     # notion-app-enhanced
 

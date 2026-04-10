@@ -86,6 +86,12 @@ in
   };
   */
 
+  # Install the package
+  services.easyeffects = {
+    enable = true;
+    # Optional: Automatically presets a specific profile on startup
+    # preset = "MyCustomFilter"; 
+  };
 
 
 

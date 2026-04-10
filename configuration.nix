@@ -28,10 +28,10 @@
     "vm.max_map_count" = 2147483642; # The "Steam Deck" value
   };
 
+  boot.initrd.kernelModules = [ "amdgpu" ];
+
   networking.enableIPv6 = false;
 
-
-  
 
 
 
@@ -51,7 +51,13 @@
     "vsyscall=emulate"      # Fixes the PioneerGame.exe vsyscall read denied (CRITICAL)
     "clearcpuid=514"        # Disables UMIP (fixes the errors from your previous log)
     "split_lock_detect=off" # Stops GameMode from failing and fixes related stutters
+    "nvidia_drm.fbdev=1" 
+    "nvidia_drm.modeset=1"
+    # This forces the card to stay awake and sync properly
+    "nvidia.NVreg_RegistryDwords=PowerMizerEnable=0x1;PerfLevelSrc=0x2222;PowerMizerDefaultAC=0x1;PowerMizerLevel=0x3;PowerMizerDefault=0x3"
+
   ];
+
 
   networking.hostName = "nixie";
 
@@ -101,6 +107,20 @@
     open = true;
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.latest;
+
+    prime = {
+      sync.enable = true;
+
+      offload.enable = false;
+      offload.enableOffloadCmd = false;
+
+
+      # 01:00.0 -> PCI:1:0:0
+      nvidiaBusId = "PCI:1:0:0";
+      # 0b:00.0 -> PCI:11:0:0 (0b hex is 11 decimal)
+      amdgpuBusId = "PCI:11:0:0";
+    };
+
   };
 
   environment.sessionVariables = {
@@ -119,11 +139,21 @@
     # Fixes invisible cursors on some NVIDIA setups
     WLR_NO_HARDWARE_CURSORS = "1"; 
 
-  __GL_SHADER_DISK_CACHE_SKIP_CLEANUP = "1";
-  __GL_SHADER_DISK_CACHE_SIZE = "4294967296"; # 4GB in bytes
+    __GL_SHADER_DISK_CACHE_SKIP_CLEANUP = "1";
+    __GL_SHADER_DISK_CACHE_SIZE = "4294967296"; # 4GB in bytesgit
+
+    # Keep your existing ones, but add these:
+    GBM_BACKEND = "nvidia-drm";
+    __GL_GSYNC_ALLOWED = "0"; # Disable G-Sync (massive source of flickers on Linux)
+    __GL_VRR_ALLOWED = "0";   # Disable VRR
+    
+    # Required for the "ghosting" fix
+    NVD_BACKEND = "direct";
 
   };
   # -----------------------
+
+  
 
 
   security.pam.loginLimits = [{
@@ -141,7 +171,7 @@
 
   users.users.levi = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "networkmanager" "disk" ];
     packages = with pkgs; [
       tree
     ];
