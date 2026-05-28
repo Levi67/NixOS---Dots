@@ -104,8 +104,16 @@ in
 
     htop
 
+    dua
+
     zellij
 
+    anki-bin
+
+    wineWowPackages.stable
+
+
+    gimp-with-plugins
 
     polkit_gnome
     
@@ -119,6 +127,7 @@ in
 
     unzip
     unrar
+
 
     # Display settings
     nwg-displays
