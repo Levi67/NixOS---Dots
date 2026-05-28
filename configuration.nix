@@ -1,5 +1,7 @@
 { config, lib, pkgs, ... }:
 
+# BITTE HELFEN SIE MIR
+
 {
   imports = [
     # Include the results of the hardware scan.
