@@ -12,6 +12,12 @@
     extraCompatPackages = with pkgs; [
       proton-ge-bin
     ];
+
+    extraPackages = with pkgs; [
+      gamemode
+      mangohud
+    ];
+
   };
 
   # 2. Critical NVIDIA/Wayland Graphics Settings
@@ -35,7 +41,21 @@
       protonup-qt  
       vulkan-tools 
       gamescope
-      prismlauncher    
+      (prismlauncher.override {
+        jdks = [
+          jdk8         # For old versions
+          jdk17        # For 1.18 - 1.20
+          jdk21        # For 1.20.5+
+          jdk25        # For the newest versions
+        ];
+      })  
+      # jdk25_headless
+
+      # Nintendo DS Emulator
+      desmume
+
+
+
     ];
 
     # --- ADDED: MangoHud Configuration ---
