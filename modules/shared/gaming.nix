@@ -42,7 +42,7 @@
       vulkan-tools 
       gamescope
 
-
+      hyprshade
 
       ryubing
 
