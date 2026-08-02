@@ -147,7 +147,7 @@
   # --- User Configurations & System Packages ---
   users.users.levi = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "disk" "gamemode" ];
+    extraGroups = [ "wheel" "networkmanager" "disk" "gamemode" "ydotool"];
     packages = with pkgs; [
       tree
     ];

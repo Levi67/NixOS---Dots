@@ -128,6 +128,16 @@ in
     unzip
     unrar
 
+    ydotool
+
+    wootility
+
+
+    rquickshare
+
+    jq
+    python3
+
 
     # Display settings
     nwg-displays
@@ -144,4 +154,6 @@ in
       };
     }))
   ];
+
+  programs.ydotool.enable = true;
 }

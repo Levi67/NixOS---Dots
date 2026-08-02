@@ -41,6 +41,11 @@
       protonup-qt  
       vulkan-tools 
       gamescope
+
+
+
+      ryubing
+
       (prismlauncher.override {
         jdks = [
           jdk8         # For old versions

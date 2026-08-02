@@ -29,6 +29,18 @@ in {
       grim
       slurp
       wl-clipboard
+
+
+
+
+      libreoffice-qt
+      hunspell
+      hunspellDicts.uk_UA
+      hunspellDicts.th_TH
+
+
+
+
       (if cfg.wallpaperEngine == "swww" then swww else hyprpaper)
     ];
 

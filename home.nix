@@ -105,6 +105,8 @@ in
 		nodejs
 		gcc
 
+    jdk25
+
 
 
 
