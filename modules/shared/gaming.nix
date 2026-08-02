@@ -43,6 +43,7 @@
       gamescope
 
       hyprshade
+      
 
       ryubing
 
