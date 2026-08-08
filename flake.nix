@@ -35,6 +35,7 @@
         ./modules/shared/gaming.nix
         ./modules/shared/developing.nix
         ./modules/shared/recording.nix
+        ./modules/services/jellyfin.nix
 
         home-manager.nixosModules.home-manager
         {

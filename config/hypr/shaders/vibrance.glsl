@@ -4,7 +4,7 @@ varying vec2 v_texcoord;
 uniform sampler2D tex;
 
 // ADJUST VIBRANCE HERE (1.0 = normal, 1.5 = moderate boost, 2.0 = heavy boost)
-const float Vibrance = 0.99; // Recommended starting point for CS2
+const float Vibrance = 0.75; // Recommended starting point for CS2
 
 void main() {
     vec4 c = texture2D(tex, v_texcoord);

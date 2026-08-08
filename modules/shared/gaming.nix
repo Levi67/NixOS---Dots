@@ -43,7 +43,7 @@
       gamescope
 
       hyprshade
-      
+
 
       ryubing
 
@@ -108,4 +108,9 @@
   # Forces the card into a higher power state when 3D apps are active
   # to prevent the "lag/stutter" when clock speeds fluctuate.
   hardware.nvidia.powerManagement.enable = false; 
+
+
+  services.xserver.enable = true; # Necessary to provide core X11 libraries
+  programs.xwayland.enable = true; # Forces Hyprland to support X11 windows
+
 }
