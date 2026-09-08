@@ -20,9 +20,7 @@
     ];
   };
 
+  
 
-  # System Packages
-  environment.systemPackages = with pkgs; [
 
-  ];
 }

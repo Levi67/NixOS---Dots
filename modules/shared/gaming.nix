@@ -44,6 +44,9 @@
 
       hyprshade
 
+      modrinth-app
+
+      
 
       ryubing
 

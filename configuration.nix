@@ -27,6 +27,7 @@
 
   nixpkgs.config.permittedInsecurePackages = [
     "electron-36.9.5"
+    "electron-39.8.10"
   ];
 
   # --- Networking & DNS ---
@@ -107,51 +108,59 @@
     package = config.boot.kernelPackages.nvidiaPackages.latest;
 
     prime = {
+      # If using Sync mode, NVIDIA controls the main display output.
       sync.enable = true;
       offload.enable = false;
       offload.enableOffloadCmd = false;
 
-      # Bus IDs
-      nvidiaBusId = "PCI:1:0:0";  # 01:00.0
-      amdgpuBusId = "PCI:11:0:0"; # 0b:00.0
+      # Run `lspci | grep -iE 'vga|3d'` in terminal to verify:
+      # 01:00.0 -> PCI:1:0:0
+      # 0b:00.0 -> PCI:11:0:0
+      nvidiaBusId = "PCI:1:0:0";
+      amdgpuBusId = "PCI:11:0:0";
     };
   };
 
+  security.polkit.enable = true;
+
   # --- Environment & Session Variables ---
   environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1"; # Forces Electron/Chromium apps (like Steam UI) to use Wayland
-  
+    NIXOS_OZONE_WL = "1";
+
     # Required for NVIDIA Wayland
     LIBVA_DRIVER_NAME = "nvidia";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-  
+
     # XDG Desktop configurations
     XDG_SESSION_TYPE = "wayland";
     XDG_CURRENT_DESKTOP = "Hyprland";
     XDG_SESSION_DESKTOP = "Hyprland";
 
-    WLR_NO_HARDWARE_CURSORS = "1"; # Fixes invisible cursors on some NVIDIA setups
-
-    WLR_DRM_NO_ATOMIC = "1";
-
+    # Performance & Caching
     __GL_SHADER_DISK_CACHE_SKIP_CLEANUP = "1";
-    __GL_SHADER_DISK_CACHE_SIZE = "4294967296"; # 4GB in bytes
+    __GL_SHADER_DISK_CACHE_SIZE = "4294967296";
 
-    GBM_BACKEND = "nvidia-drm";
-    __GL_GSYNC_ALLOWED = "0"; # Disable G-Sync (massive source of flickers on Linux)
-    __GL_VRR_ALLOWED = "0";   # Disable VRR
-    
-    NVD_BACKEND = "direct";   # Required for the "ghosting" fix
+    __GL_GSYNC_ALLOWED = "0";
+    __GL_VRR_ALLOWED = "0";
+
+    NVD_BACKEND = "direct";
   };
 
   # --- User Configurations & System Packages ---
   users.users.levi = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "disk" "gamemode" "ydotool"];
+    extraGroups = [ "wheel" "networkmanager" "disk" "gamemode" "ydotool" "media"];
     packages = with pkgs; [
       tree
     ];
     shell = pkgs.fish;
+  };
+
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 8096 8920 ];
+    # Falls du DLNA / Local Discovery nutzt, brauchst du auch diese UDP-Ports:
+    allowedUDPPorts = [ 1900 7359 ];
   };
 
   programs.firefox.enable = true;
@@ -166,6 +175,7 @@
     vim
     wget
     kitty
+    hyprpolkitagent
   ];
 
   fonts.packages = with pkgs; [

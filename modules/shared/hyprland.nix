@@ -30,13 +30,21 @@ in {
       slurp
       wl-clipboard
 
+      vlc
 
+      hyprshot
+      grim
+      slurp
 
 
       libreoffice-qt
       hunspell
       hunspellDicts.uk_UA
       hunspellDicts.th_TH
+
+
+      yt-dlp
+      
 
 
 
