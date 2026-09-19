@@ -29,6 +29,6 @@
 
     # Git UIs / AI tools
     gitkraken
-    claude-code
+    # claude-code
   ];
 }

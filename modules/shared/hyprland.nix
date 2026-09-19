@@ -16,8 +16,7 @@ in {
 
   # 2. Define the "Config" (What happens when enabled)
   config = lib.mkIf cfg.enable {
-
-    services.easyeffects.enable = true;
+    
     # Install the "Bonus Apps" system-wide
     environment.systemPackages = with pkgs; [
       inputs.quickshell.packages.${pkgs.system}.default
@@ -32,7 +31,10 @@ in {
       hyprshot
 
       vlc
+
       yt-dlp
+
+      nautilus
 
       libreoffice-qt
       hunspell
@@ -42,8 +44,12 @@ in {
       (if cfg.wallpaperEngine == "swww" then swww else hyprpaper)
     ];
 
-    # Dotfile symlinks (still per-user via home-manager)
+    # Per-user bits that must stay in home-manager
     home-manager.users.levi = { config, ... }: {
+      # Audio effects daemon (user service)
+      services.easyeffects.enable = true;
+
+      # Dotfile symlinks
       xdg.configFile."hypr" = {
         source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-dotfiles/config/hypr/";
         recursive = true;
