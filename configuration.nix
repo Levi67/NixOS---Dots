@@ -45,8 +45,10 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Use latest Zen kernel
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  # Use latest kernel
+  boot.kernelPackages = pkgs.linuxPackages;
+
+  # boot.kernelPackages = pkgs.linuxPackages_zen;
 
   boot.initrd.kernelModules = [ "amdgpu" ];
 
@@ -84,9 +86,19 @@
   };
 
   xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+  enable = true;
+  extraPortals = [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
+  
+  config = {
+    common = {
+      # Use lib.mkForce to resolve the conflict with your flatpak.nix file
+      default = lib.mkForce [ "hyprland" ];
+      "org.freedesktop.impl.portal.FileChooser" = lib.mkForce [ "gtk" ];
+    };
   };
+};
+
+
 
   console = {
     font = "Lat2-Terminus16";

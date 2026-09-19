@@ -10,6 +10,6 @@
 
   # System Packages
   environment.systemPackages = with pkgs; [
-
+    claude-code
   ];
 }

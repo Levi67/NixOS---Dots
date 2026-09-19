@@ -44,9 +44,11 @@
 
       hyprshade
 
-      modrinth-app
+      # modrinth-app
 
-      
+      faugus-launcher
+
+
 
       ryubing
 
