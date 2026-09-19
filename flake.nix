@@ -32,10 +32,11 @@
       modules = [
         ./configuration.nix
         ./modules/common/default.nix
+        ./modules/shared/hyprland.nix
         ./modules/shared/gaming.nix
         ./modules/shared/developing.nix
         ./modules/shared/recording.nix
-        ./modules/services/jellyfin.nix
+        ./modules/services/media-mount.nix
 
         home-manager.nixosModules.home-manager
         {

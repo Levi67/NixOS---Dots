@@ -14,7 +14,7 @@
     auto-optimise-store = true;
     experimental-features = [ "nix-command" "flakes" ];
     # Allows MANUAL builds to use all available CPU threads automatically
-    cores = 0; 
+    cores = 0;
   };
 
   nix.gc = {
@@ -58,11 +58,11 @@
     "vm.max_map_count" = 2147483642; # The "Steam Deck" value
   };
 
-  boot.kernelParams = [ 
+  boot.kernelParams = [
     "vsyscall=emulate"      # Fixes the PioneerGame.exe vsyscall read denied (CRITICAL)
     "clearcpuid=514"        # Disables UMIP (fixes the errors from your previous log)
     "split_lock_detect=off" # Stops GameMode from failing and fixes related stutters
-    "nvidia_drm.fbdev=1" 
+    "nvidia_drm.fbdev=1"
     "nvidia_drm.modeset=1"
     # Forces the NVIDIA card to stay awake and sync properly
     "nvidia.NVreg_RegistryDwords=PowerMizerEnable=0x1;PerfLevelSrc=0x2222;PowerMizerDefaultAC=0x1;PowerMizerLevel=0x3;PowerMizerDefault=0x3"
@@ -86,23 +86,17 @@
   };
 
   xdg.portal = {
-  enable = true;
-  extraPortals = [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
-  
-  config = {
-    common = {
-      # Use lib.mkForce to resolve the conflict with your flatpak.nix file
-      default = lib.mkForce [ "hyprland" ];
-      "org.freedesktop.impl.portal.FileChooser" = lib.mkForce [ "gtk" ];
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
+    config.common = {
+      default = [ "hyprland" ];
+      "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
     };
   };
-};
-
-
 
   console = {
     font = "Lat2-Terminus16";
-    useXkbConfig = true; 
+    useXkbConfig = true;
   };
 
   # --- NVIDIA Settings ---
@@ -137,57 +131,47 @@
 
   # --- Environment & Session Variables ---
   environment.sessionVariables = {
+    # Wayland / Ozone
     NIXOS_OZONE_WL = "1";
-
-    # Required for NVIDIA Wayland
-    LIBVA_DRIVER_NAME = "nvidia";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-
-    # XDG Desktop configurations
     XDG_SESSION_TYPE = "wayland";
     XDG_CURRENT_DESKTOP = "Hyprland";
     XDG_SESSION_DESKTOP = "Hyprland";
 
-    # Performance & Caching
+    # NVIDIA / Wayland
+    LIBVA_DRIVER_NAME = "nvidia";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    GBM_BACKEND = "nvidia-drm";
+    NVD_BACKEND = "direct";
+    WLR_NO_HARDWARE_CURSORS = "1";
+
+    # NVIDIA performance / caching
     __GL_SHADER_DISK_CACHE_SKIP_CLEANUP = "1";
     __GL_SHADER_DISK_CACHE_SIZE = "4294967296";
-
     __GL_GSYNC_ALLOWED = "0";
     __GL_VRR_ALLOWED = "0";
-
-    NVD_BACKEND = "direct";
   };
 
   # --- User Configurations & System Packages ---
   users.users.levi = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "disk" "gamemode" "ydotool" "media"];
-    packages = with pkgs; [
-      tree
-    ];
+    extraGroups = [ "wheel" "networkmanager" "disk" "gamemode" "ydotool" "media" ];
     shell = pkgs.fish;
   };
 
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 8096 8920 ];
-    # Falls du DLNA / Local Discovery nutzt, brauchst du auch diese UDP-Ports:
-    allowedUDPPorts = [ 1900 7359 ];
-  };
+  networking.firewall.enable = true;
 
   programs.firefox.enable = true;
   programs.fish.enable = true;
 
-  programs.java = {
-    enable = true;
-    package = pkgs.jdk; # Latest LTS version
-  };
+  # Hyprland suite (defined in modules/shared/hyprland.nix)
+  myHyprland.enable = true;
 
   environment.systemPackages = with pkgs; [
     vim
     wget
     kitty
     hyprpolkitagent
+    tree
   ];
 
   fonts.packages = with pkgs; [
@@ -196,7 +180,6 @@
 
   # --- System Services ---
   services.openssh.enable = true;
-  services.flatpak.enable = true;
 
   security.pam.loginLimits = [{
     domain = "*";
@@ -230,5 +213,5 @@
   programs.git.config.safe.directory = [ "/home/levi/nixos-dotfiles" ];
 
   # Do not change this value.
-  system.stateVersion = "25.11"; 
+  system.stateVersion = "25.11";
 }
