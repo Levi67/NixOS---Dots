@@ -4,17 +4,15 @@
 
 {
   imports = [
-    # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./modules/shared/flatpak.nix
   ];
 
-  # --- Nix Package Manager & Garbage Collection Settings ---
+  # --- Nix ---
   nix.settings = {
     auto-optimise-store = true;
     experimental-features = [ "nix-command" "flakes" ];
-    # Allows MANUAL builds to use all available CPU threads automatically
-    cores = 0;
+    cores = 0; # Manual builds may use all available CPU threads
   };
 
   nix.gc = {
@@ -24,32 +22,31 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-
   nixpkgs.config.permittedInsecurePackages = [
     "electron-36.9.5"
     "electron-39.8.10"
   ];
 
-  # --- Networking & DNS ---
-  networking.hostName = "nixie";
-  networking.networkmanager.enable = true;
-  networking.enableIPv6 = false;
+  # --- Networking ---
+  networking = {
+    hostName = "nixie";
+    enableIPv6 = false;
+    firewall.enable = true;
+    networkmanager = {
+      enable = true;
+      dns = "systemd-resolved";
+    };
+  };
 
-  # Local dns cache
-  services.resolved.enable = true;
-  networking.networkmanager.dns = "systemd-resolved";
+  services.resolved.enable = true; # Local DNS cache
 
   time.timeZone = "Europe/Berlin";
 
-  # --- Bootloader & Kernel Configuration ---
+  # --- Boot & Kernel ---
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Use latest kernel
   boot.kernelPackages = pkgs.linuxPackages;
-
-  # boot.kernelPackages = pkgs.linuxPackages_zen;
-
   boot.initrd.kernelModules = [ "amdgpu" ];
 
   boot.kernel.sysctl = {
@@ -68,14 +65,14 @@
     "nvidia.NVreg_RegistryDwords=PowerMizerEnable=0x1;PerfLevelSrc=0x2222;PowerMizerDefaultAC=0x1;PowerMizerLevel=0x3;PowerMizerDefault=0x3"
   ];
 
-  # --- Graphics & Desktop Environment ---
+  # --- Graphics & Desktop ---
   services.xserver = {
     enable = true;
     autoRepeatDelay = 200;
     autoRepeatInterval = 35;
     windowManager.qtile.enable = false;
     xkb.layout = "de";
-    videoDrivers = [ "nvidia" ]; # Load NVIDIA driver for Xorg and Wayland
+    videoDrivers = [ "nvidia" ];
   };
 
   services.displayManager.ly.enable = true;
@@ -84,6 +81,8 @@
     enable = true;
     xwayland.enable = true;
   };
+
+  myHyprland.enable = true; # See modules/shared/hyprland.nix
 
   xdg.portal = {
     enable = true;
@@ -99,7 +98,7 @@
     useXkbConfig = true;
   };
 
-  # --- NVIDIA Settings ---
+  # --- NVIDIA ---
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -114,12 +113,12 @@
     package = config.boot.kernelPackages.nvidiaPackages.latest;
 
     prime = {
-      # If using Sync mode, NVIDIA controls the main display output.
+      # Sync mode: NVIDIA controls the main display output.
       sync.enable = true;
       offload.enable = false;
       offload.enableOffloadCmd = false;
 
-      # Run `lspci | grep -iE 'vga|3d'` in terminal to verify:
+      # Run `lspci | grep -iE 'vga|3d'` to verify:
       # 01:00.0 -> PCI:1:0:0
       # 0b:00.0 -> PCI:11:0:0
       nvidiaBusId = "PCI:1:0:0";
@@ -127,9 +126,7 @@
     };
   };
 
-  security.polkit.enable = true;
-
-  # --- Environment & Session Variables ---
+  # --- Session variables ---
   environment.sessionVariables = {
     # Wayland / Ozone
     NIXOS_OZONE_WL = "1";
@@ -151,20 +148,16 @@
     __GL_VRR_ALLOWED = "0";
   };
 
-  # --- User Configurations & System Packages ---
+  # --- Users ---
   users.users.levi = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "disk" "gamemode" "ydotool" "media" ];
     shell = pkgs.fish;
   };
 
-  networking.firewall.enable = true;
-
+  # --- System programs & packages ---
   programs.firefox.enable = true;
   programs.fish.enable = true;
-
-  # Hyprland suite (defined in modules/shared/hyprland.nix)
-  myHyprland.enable = true;
 
   environment.systemPackages = with pkgs; [
     vim
@@ -178,7 +171,8 @@
     nerd-fonts.jetbrains-mono
   ];
 
-  # --- System Services ---
+  # --- Services & security ---
+  security.polkit.enable = true;
   services.openssh.enable = true;
 
   security.pam.loginLimits = [{
@@ -192,24 +186,21 @@
     SUBSYSTEM=="usb", ATTRS{idVendor}=="0fd9", TAG+="uaccess"
   '';
 
-  # --- Background Automated Upgrades (Game-Optimized) ---
+  # --- Background auto-upgrade (game-friendly) ---
   system.autoUpgrade = {
     enable = true;
     dates = "weekly";
     flake = "git+file:///home/levi/nixos-dotfiles#nixie";
-    flags = [
-      "--update-input"
-      "nixpkgs"
-    ];
+    flags = [ "--update-input" "nixpkgs" ];
   };
 
-  # Penalizes the background auto-updater so it stays out of your way during games
+  # Penalizes the auto-updater so it stays out of the way during games
   systemd.services.nixos-upgrade.serviceConfig = {
-    Nice = 19;                  # Lowest possible CPU priority
-    IOSchedulingClass = "idle"; # Only uses disk bandwidth if the system is completely idle
+    Nice = 19;
+    IOSchedulingClass = "idle";
   };
 
-  # Allows root to interact with your user-owned git repo during auto-upgrade
+  # Allows root to interact with the user-owned git repo during auto-upgrade
   programs.git.config.safe.directory = [ "/home/levi/nixos-dotfiles" ];
 
   # Do not change this value.

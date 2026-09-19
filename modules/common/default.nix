@@ -66,6 +66,9 @@ in
       hidePodcasts
       fullAppDisplay
     ];
+    enabledCustomApps = with spicePkgs.apps; [
+      marketplace  # Spicetify shop (browsable; installs from it don't stick under this flake)
+    ];
   };
 
   services.gnome.gnome-keyring.enable = true;
@@ -80,7 +83,7 @@ in
     tty-clock
     pavucontrol
 
-    nautilus
+    
 
     htop
     dua

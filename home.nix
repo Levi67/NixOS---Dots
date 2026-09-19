@@ -39,6 +39,4 @@ in
     @nClientDownloadEnableHTTP2PlatformLinux 0
     @fDownloadRateImprovementToAddAnotherConnection 1.0
   '';
-
-
 }

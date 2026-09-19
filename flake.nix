@@ -3,24 +3,22 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-25.11";
-    zen-browser.url = "github:0xc000022070/zen-browser-flake";
-
-    # Spicetify
-    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-    spicetify-nix.inputs.nixpkgs.follows = "nixpkgs";
-
-
-    quickshell = {
-      # add ?ref=<tag> to track a tag
-      url = "github:quickshell-mirror/quickshell";
-
-      # THIS IS IMPORTANT
-      # Mismatched system dependencies will lead to crashes and other issues.
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+
+    spicetify-nix = {
+      url = "github:Gerg-L/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # IMPORTANT: mismatched system deps -> crashes. Keep nixpkgs pinned.
+    quickshell = {
+      url = "github:quickshell-mirror/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -43,12 +41,8 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-
-
-            extraSpecialArgs = { inherit inputs; };
-
-
             backupFileExtension = "backup";
+            extraSpecialArgs = { inherit inputs; };
           };
         }
       ];
