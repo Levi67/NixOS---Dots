@@ -55,21 +55,23 @@ in
     HYPRCURSOR_SIZE = "24";
   };
 
-  # Spicetify (System level)
-  programs.spicetify = {
-    enable = true;
-    theme = spicePkgs.themes.catppuccin;
-    colorScheme = "mocha";
-    enabledExtensions = with spicePkgs.extensions; [
-      adblock
-      shuffle
-      hidePodcasts
-      fullAppDisplay
-    ];
-    enabledCustomApps = with spicePkgs.apps; [
-      marketplace  # Spicetify shop (browsable; installs from it don't stick under this flake)
-    ];
-  };
+programs.spicetify = {
+  enable = true;
+
+  theme = spicePkgs.themes.starryNight;
+  colorScheme = "Base"; # Zum Beispiel "Galaxy", "Base", "Forest" etc.
+
+  enabledExtensions = with spicePkgs.extensions; [
+    adblock
+    shuffle
+    hidePodcasts
+    fullAppDisplay
+  ];
+
+  enabledCustomApps = with spicePkgs.apps; [
+    marketplace
+  ];
+};
 
   services.gnome.gnome-keyring.enable = true;
 

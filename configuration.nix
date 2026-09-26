@@ -62,7 +62,7 @@
     "nvidia_drm.fbdev=1"
     "nvidia_drm.modeset=1"
     # Forces the NVIDIA card to stay awake and sync properly
-    "nvidia.NVreg_RegistryDwords=PowerMizerEnable=0x1;PerfLevelSrc=0x2222;PowerMizerDefaultAC=0x1;PowerMizerLevel=0x3;PowerMizerDefault=0x3"
+    # "nvidia.NVreg_RegistryDwords=PowerMizerEnable=0x1;PerfLevelSrc=0x2222;PowerMizerDefaultAC=0x1;PowerMizerLevel=0x3;PowerMizerDefault=0x3"
   ];
 
   # --- Graphics & Desktop ---
@@ -74,6 +74,8 @@
     xkb.layout = "de";
     videoDrivers = [ "nvidia" ];
   };
+
+  programs.nix-ld.enable = true;
 
   services.displayManager.ly.enable = true;
 
@@ -106,7 +108,7 @@
 
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = false;
+    powerManagement.enable = true;
     powerManagement.finegrained = false;
     open = true; # Recommended for 40-series cards
     nvidiaSettings = true;
